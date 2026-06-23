@@ -1,18 +1,32 @@
 import React from 'react'
 import Card from './Card'
-import { useQuery } from '@tanstack/react-query'
-import { getWeather } from '../api'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { getWeatherDaily } from '../api'
 
 type Props = {}
 
-export default function DailyWeatherCard({}: Props) {
-    const { data } = useQuery({
+export default function DailyWeatherCard({ }: Props) {
+    const { data } = useSuspenseQuery({
         queryKey: ['weather-daily'],
-        queryFn: () => getWeather({ lat: 0, lon: 50, timeline: '1day' })
+        queryFn: () => getWeatherDaily({ lat: 10, lon: 25 })
     })
-  return (
-    <Card title={'Daily Forecast'}>
-        {JSON.stringify(data?.data)} 
-    </ Card >
-  )
+    return (
+        <Card title={'Daily Forecast'}>
+            <div>
+                {data?.data.map((day) => (
+                    <div key={day.dt} className='flex justify-between'>
+                        <p className='size-2'>{new Date(day.dt * 1000).toLocaleDateString(undefined,
+                            {weekday: "short"}
+                        )} </p>
+                        <img className='size-8'
+                          src="https://openweathermap.org/payload/api/media/file/10d%402x.png" alt="" />
+                        <p className='size-2'>{Math.round(day.temp.day)}°F</p>
+                        <p className='size-2 text-gray-500/75'>{Math.round(day.temp.min)}°F</p>
+                        <p className='size-2 text-gray-500/75'>{Math.round(day.temp.max)}°F</p>
+
+                    </div>
+                ))}
+            </div>
+        </ Card >
+    )
 }

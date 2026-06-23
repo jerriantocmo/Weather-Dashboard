@@ -1,16 +1,43 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import React from 'react'
-import { getWeather } from '../api'
+import { getWeatherCurrent } from '../api'
 import Card from './Card'
 
 type Props = {}
 
 export default function CurrentWeatherCard({ }: Props) {
-    const { data } = useQuery({
+    const { data } = useSuspenseQuery({
         queryKey: ['weather-current'],
-        queryFn: () => getWeather({ lat: 0, lon: 50, timeline: 'current' })
+        queryFn: () => getWeatherCurrent({ lat: 0, lon: 50 })
     })
+
+    const current = data.data[0]
     return (
-         <Card title='Current Forecast'>{JSON.stringify(data)} </ Card >
+        <Card title='Current Forecast'>
+            <div className='flex flex-col items-center gap-2'>
+                <h3 className='text-6xl'>{Math.round(current.temp)}°F</h3>
+                <img className='size-18' src={`https://openweathermap.org/payload/api/media/file/${current.weather[0].icon}.png`} alt="Current Weather" />
+                <h3 className='text-4xl'>{new Date(current.dt * 1000).toLocaleTimeString(undefined, {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                    timeZone: data.timezone,
+                })} </h3>
+                <div className='flex gap-2 justify-between w-full'>
+                    <div className='flex flex-col items-center'>
+                        <p>Feels Like</p>
+                        <p>{Math.round(current.feels_like)}°F</p>
+                    </div>
+                    <div className='flex flex-col items-center gap-2'>
+                        <p>Humidity</p>
+                        <p>{current.humidity}%</p>
+                    </div>
+                    <div className='flex flex-col items-center gap-2'>
+                        <p>Wind</p>
+                        <p>{current.wind_speed} mph</p>
+                    </div>
+                </div>
+            </div>
+        </ Card >
     )
 }
