@@ -2,13 +2,16 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import React from 'react'
 import { getWeatherCurrent } from '../api'
 import Card from './Card'
+import type { Coord } from '../types'
 
-type Props = {}
+type Props = {
+    coords: Coord
+}
 
-export default function CurrentWeatherCard({ }: Props) {
+export default function CurrentWeatherCard({ coords }: Props) {
     const { data } = useSuspenseQuery({
-        queryKey: ['weather-current'],
-        queryFn: () => getWeatherCurrent({ lat: 0, lon: 50 })
+        queryKey: ['weather-current', coords],
+        queryFn: () => getWeatherCurrent({ lat: coords.lat, lon: coords.lon})
     })
 
     const current = data.data[0]
@@ -24,7 +27,7 @@ export default function CurrentWeatherCard({ }: Props) {
                     timeZone: data.timezone,
                 })} </h3>
                 <div className='flex gap-2 justify-between w-full'>
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center gap-2'>
                         <p>Feels Like</p>
                         <p>{Math.round(current.feels_like)}°F</p>
                     </div>
