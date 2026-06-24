@@ -3,6 +3,7 @@ import { useState } from 'react'
 import DailyWeatherCard from './components/DailyWeatherCard'
 import CurrentWeatherCard from './components/CurrentWeatherCard'
 import HourlyWeatherCard from './components/HourlyWeatherCard'
+import AdditionalInfoCard from './components/AdditionalInfoCard'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <CurrentWeatherCard />
       <HourlyWeatherCard />
       <DailyWeatherCard />
+      <AdditionalInfoCard />
       
     </ div>
   )

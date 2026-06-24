@@ -12,9 +12,9 @@ export default function HourlyWeatherCard({ }: Props) {
     })
     return (
         <Card title='Hourly Forecast'>
-            <div className='flex gap-4 overflow-x-auto'>
+            <div className='flex gap-8 overflow-x-auto'>
                 {data?.data.map(hour => (
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col 2xl:justify-between gap-2 items-center p-2'>
                         <p>{new Date(hour.dt*1000).toLocaleTimeString(undefined, {
                             hour: "numeric",
                             minute:"2-digit"

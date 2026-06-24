@@ -11,8 +11,7 @@ export default function DailyWeatherCard({ }: Props) {
         queryFn: () => getWeatherDaily({ lat: 10, lon: 25 })
     })
     return (
-        <Card title={'Daily Forecast'}>
-            <div>
+        <Card title={'Daily Forecast'} childrenClassName="gap-6">
                 {data?.data.map((day) => (
                     <div key={day.dt} className='flex justify-between'>
                         <p className='size-2'>{new Date(day.dt * 1000).toLocaleDateString(undefined,
@@ -26,7 +25,6 @@ export default function DailyWeatherCard({ }: Props) {
 
                     </div>
                 ))}
-            </div>
         </ Card >
     )
 }
